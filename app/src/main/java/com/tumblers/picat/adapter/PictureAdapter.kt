@@ -15,7 +15,8 @@ import com.tumblers.picat.dataclass.ImageData
 
 class PictureAdapter(private var imageDataList: ArrayList<ImageData>,
                      val mContext: Context,
-                     var mSelected: HashSet<Int>)
+                     var mSelected: HashSet<Int>,
+                     var zoomSelected: HashSet<Int>)
     : RecyclerView.Adapter<PictureAdapter.PictureViewHolder>(){
     private var mClickListener: ItemClickListener? = null
 
@@ -32,10 +33,20 @@ class PictureAdapter(private var imageDataList: ArrayList<ImageData>,
             .into(holder.imv)
         
         holder.itemView.setOnClickListener {
-            var intent = Intent(mContext, ImageViewPagerActivity::class.java)
-            intent.putExtra("imageList", imageDataList)
-            intent.putExtra("current", position)
-            mContext.startActivity(intent)
+//            var intent = Intent(mContext, ImageViewPagerActivity::class.java)
+//            intent.putExtra("imageList", imageDataList)
+//            intent.putExtra("current", position)
+//            mContext.startActivity(intent)
+            if (zoomSelected.contains(position)) {
+                zoomSelected.remove(position)
+            } else {
+                zoomSelected.add(position)
+            }
+
+            notifyItemChanged(position)
+            Glide.with(mContext)
+                .load(imageDataList[position].uri)
+                .into(holder.imv)
         }
 
         // 화면 갱신 시 필요

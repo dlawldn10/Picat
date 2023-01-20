@@ -88,4 +88,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.0.2'
     implementation "org.jetbrains.kotlin:kotlin-script-runtime:1.7.20"
+
+    implementation 'com.arasthel:spannedgridlayoutmanager:3.0.2'
 }

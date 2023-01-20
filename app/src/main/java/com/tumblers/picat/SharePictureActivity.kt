@@ -34,6 +34,8 @@ import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arasthel.spannedgridlayoutmanager.SpanSize
+import com.arasthel.spannedgridlayoutmanager.SpannedGridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kakao.sdk.friend.client.PickerClient
@@ -86,6 +88,7 @@ class SharePictureActivity: AppCompatActivity(){
     var joinFriendList: ArrayList<FriendData> = ArrayList()
     var imageDataList: ArrayList<ImageData> = ArrayList()
     var selectionIdList: HashSet<Int> = hashSetOf()
+    var zoomSelectionList: HashSet<Int> = hashSetOf()
 
     // 유저 데이터
     var myKakaoId : Long? = null
@@ -273,7 +276,7 @@ class SharePictureActivity: AppCompatActivity(){
         }
 
         //Adapter 초기화
-        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList)
+        binding.profileRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
         profilePictureAdapter = ProfilePictureAdapter(joinFriendList, this)
         profilePictureAdapter.setClickListener(object : ProfilePictureAdapter.ItemClickListener{
             override fun onItemClick(view: View?, position: Int) {
@@ -283,14 +286,21 @@ class SharePictureActivity: AppCompatActivity(){
         })
 
         //recyclerview 레이아웃 설정
+        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList, zoomSelectionList)
         binding.pictureRecyclerview.layoutManager = GridLayoutManager(this, 3)
-        binding.profileRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
-
-        binding.pictureRecyclerview.adapter = pictureAdapter
-
         binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
-
-
+//        val spannedGridLayoutManager = SpannedGridLayoutManager(orientation = SpannedGridLayoutManager.Orientation.VERTICAL, spans = 3)
+//        spannedGridLayoutManager.itemOrderIsStable = true
+//        binding.pictureRecyclerview.layoutManager = spannedGridLayoutManager
+//        binding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))
+//        spannedGridLayoutManager.spanSizeLookup = SpannedGridLayoutManager.SpanSizeLookup { position ->
+//            if (pictureAdapter.zoomSelected.contains(position)) {
+//                SpanSize(2, 2)
+//            } else {
+//                SpanSize(1, 1)
+//            }
+//        }
+        binding.pictureRecyclerview.adapter = pictureAdapter
 
 
         //바텀시트 초기화
@@ -605,8 +615,25 @@ class SharePictureActivity: AppCompatActivity(){
     // recyclerview 초기화
     private fun setRecyclerView(){
         // picture recyclerview 설정
-        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList)
+        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList, zoomSelectionList)
+
+        binding.pictureRecyclerview.layoutManager = GridLayoutManager(this, 3)
+        binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
+
+//        val spannedGridLayoutManager = SpannedGridLayoutManager(orientation = SpannedGridLayoutManager.Orientation.VERTICAL, spans = 3)
+//        spannedGridLayoutManager.itemOrderIsStable = true
+//        binding.pictureRecyclerview.layoutManager = spannedGridLayoutManager
+//        binding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))
+//        binding.pictureRecyclerview.isNestedScrollingEnabled = false
+//        spannedGridLayoutManager.spanSizeLookup = SpannedGridLayoutManager.SpanSizeLookup { position ->
+//            if (pictureAdapter.zoomSelected.contains(position)) {
+//                SpanSize(2, 2)
+//            } else {
+//                SpanSize(1, 1)
+//            }
+//        }
         binding.pictureRecyclerview.adapter = pictureAdapter
+
     }
 
     // 툴바 메뉴 버튼 설정
