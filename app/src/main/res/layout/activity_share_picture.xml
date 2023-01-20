@@ -15,140 +15,163 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/main_background"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        android:src="@drawable/login_background2"
+        app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-    <com.tumblers.picat.CustomScrollView
-        android:id="@+id/scroll_view"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/picture_main_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constrainedHeight="true"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintLeft_toLeftOf="@+id/toolbar"
-        app:layout_constraintRight_toRightOf="@id/toolbar">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--    <com.tumblers.picat.CustomScrollView-->
+<!--        android:id="@+id/scroll_view"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="@+id/toolbar"-->
+<!--        app:layout_constraintRight_toRightOf="@id/toolbar"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.0">-->
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/profile_tab"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="30dp"
-                android:paddingBottom="40dp"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="63dp">
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
-                <EditText
-                    android:id="@+id/room_name_editText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:fontFamily="@font/notosans_regular"
-                    android:gravity="center"
-                    android:hint="앨범 이름"
-                    android:includeFontPadding="false"
-                    android:textColor="@color/picat_font_color"
-                    android:textSize="@dimen/picat_text_size_large"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+<!--&lt;!&ndash;            <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/profile_tab"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginTop="63dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:paddingTop="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:paddingBottom="40dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="parent">&ndash;&gt;-->
 
-
-                <HorizontalScrollView
-                    android:id="@+id/profile_horizontal_scrollview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="40dp"
-                    android:layout_marginBottom="30dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintHorizontal_bias="0.6"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/room_name_editText">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/profile_recyclerview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toLeftOf="parent"></androidx.recyclerview.widget.RecyclerView>
-
-                        <ImageButton
-                            android:id="@+id/profile_item_plus_button"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginLeft="4dp"
-                            android:background="@drawable/round_button_shape_blue"
-                            android:padding="8dp"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/plus_fab"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toRightOf="@+id/profile_recyclerview"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_bias="0.4" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--&lt;!&ndash;                <EditText&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/room_name_editText"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:background="@null"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:fontFamily="@font/notosans_regular"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:hint="앨범 이름"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:includeFontPadding="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textColor="@color/picat_font_color"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textSize="@dimen/picat_text_size_large"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintVertical_bias="0.0" />&ndash;&gt;-->
 
 
-                </HorizontalScrollView>
+<!--&lt;!&ndash;                <HorizontalScrollView&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/profile_horizontal_scrollview"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginTop="40dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_marginBottom="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintHorizontal_bias="0.6"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    app:layout_constraintTop_toBottomOf="@id/room_name_editText">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                        android:layout_height="wrap_content">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:id="@+id/profile_recyclerview"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                            app:layout_constraintLeft_toLeftOf="parent"></androidx.recyclerview.widget.RecyclerView>&ndash;&gt;-->
+
+<!--&lt;!&ndash;                        <ImageButton&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:id="@+id/profile_item_plus_button"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_width="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_height="30dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:layout_marginLeft="4dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:background="@drawable/round_button_shape_blue"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:padding="8dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:scaleType="fitCenter"&ndash;&gt;-->
+<!--&lt;!&ndash;                            android:src="@drawable/plus_fab"&ndash;&gt;-->
+<!--&lt;!&ndash;                            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                            app:layout_constraintLeft_toRightOf="@+id/profile_recyclerview"&ndash;&gt;-->
+<!--&lt;!&ndash;                            app:layout_constraintTop_toTopOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                            app:layout_constraintVertical_bias="0.4" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;                    </androidx.constraintlayout.widget.ConstraintLayout>&ndash;&gt;-->
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="자동 업로드"
-                android:gravity="center_vertical"
-                android:layout_marginRight="4dp"
-                android:includeFontPadding="false"
-                android:switchMinWidth="0dp"
-                android:textSize="@dimen/picat_text_size_small"
-                android:textColor="@color/picat_font_color"
-                app:layout_constraintTop_toTopOf="@+id/auto_upload_switch"
-                app:layout_constraintBottom_toBottomOf="@+id/auto_upload_switch"
-                app:layout_constraintRight_toLeftOf="@+id/auto_upload_switch"/>
+<!--&lt;!&ndash;                </HorizontalScrollView>&ndash;&gt;-->
 
 
-            <Switch
-                android:id="@+id/auto_upload_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:gravity="right|center"
+<!--&lt;!&ndash;            </androidx.constraintlayout.widget.ConstraintLayout>&ndash;&gt;-->
 
-                android:textOff=""
-                android:textOn=""
-                android:textSize="@dimen/picat_text_size_medium"
-                android:thumb="@drawable/switch_thumb"
+<!--&lt;!&ndash;            <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginRight="4dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:gravity="center_vertical"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:includeFontPadding="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:switchMinWidth="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:text="자동 업로드"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textColor="@color/picat_font_color"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="@dimen/picat_text_size_small"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintBottom_toBottomOf="@+id/auto_upload_switch"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintRight_toLeftOf="@+id/auto_upload_switch"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="@+id/auto_upload_switch" />&ndash;&gt;-->
 
-                android:track="@drawable/switch_track_selector"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profile_tab"/>
+<!--&lt;!&ndash;            <Switch&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/auto_upload_switch"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginRight="20dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginBottom="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:gravity="right|center"&ndash;&gt;-->
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/picture_recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:layout_constrainedHeight="true"
-                app:layout_constraintTop_toBottomOf="@id/auto_upload_switch"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                android:layout_marginTop="10dp"/>
+<!--&lt;!&ndash;                android:textOff=""&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textOn=""&ndash;&gt;-->
+<!--&lt;!&ndash;                android:textSize="@dimen/picat_text_size_medium"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:thumb="@drawable/switch_thumb"&ndash;&gt;-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+<!--&lt;!&ndash;                android:track="@drawable/switch_track_selector"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toBottomOf="@+id/profile_tab" />&ndash;&gt;-->
 
-    </com.tumblers.picat.CustomScrollView>
+<!--&lt;!&ndash;            <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/picture_recyclerview"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_marginTop="10dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constrainedHeight="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:nestedScrollingEnabled="false"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toBottomOf="@id/auto_upload_switch" />&ndash;&gt;-->
+
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--    </com.tumblers.picat.CustomScrollView>-->
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/picture_recyclerview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constrainedHeight="true"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/scroll_view"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        android:layout_marginTop="10dp"/>-->
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/open_bottomsheet_fab"

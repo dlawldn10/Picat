@@ -41,7 +41,7 @@ class DownloadCompleteFragment : Fragment() {
         val activity = inflater.context as SharePictureActivity
         val actionbar: ActionBar? = activity.supportActionBar
         actionbar?.hide()
-        activity.binding.openBottomsheetFab.visibility = View.INVISIBLE
+        activity.mainBinding.openBottomsheetFab.visibility = View.INVISIBLE
 
 
         var fragmentBinding = inflate(inflater, container, false)

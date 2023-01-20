@@ -31,9 +31,10 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.arasthel.spannedgridlayoutmanager.SpanSize
+import com.arasthel.spannedgridlayoutmanager.SpannedGridLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.kakao.sdk.friend.client.PickerClient
@@ -44,6 +45,8 @@ import com.kakao.sdk.talk.TalkApiClient
 import com.kakao.sdk.user.UserApiClient
 import com.tumblers.picat.adapter.*
 import com.tumblers.picat.databinding.ActivitySharePictureBinding
+import com.tumblers.picat.databinding.ActivitySharePictureHeaderBinding
+import com.tumblers.picat.databinding.ActivitySharePictureRecyclerviewBinding
 import com.tumblers.picat.databinding.ExitDialogBinding
 import com.tumblers.picat.databinding.InviteCheckDialogBinding
 import com.tumblers.picat.databinding.LoadingDialogBinding
@@ -71,11 +74,10 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicReferenceArray
 
 
 class SharePictureActivity: AppCompatActivity(){
-    lateinit var binding: ActivitySharePictureBinding
+    lateinit var mainBinding: ActivitySharePictureBinding
 
     lateinit var pictureAdapter: PictureAdapter
     lateinit var profilePictureAdapter: ProfilePictureAdapter
@@ -86,6 +88,7 @@ class SharePictureActivity: AppCompatActivity(){
     var joinFriendList: ArrayList<FriendData> = ArrayList()
     var imageDataList: ArrayList<ImageData> = ArrayList()
     var selectionIdList: HashSet<Int> = hashSetOf()
+    var zoomSelectionList: HashSet<Int> = hashSetOf()
 
     // 유저 데이터
     var myKakaoId : Long? = null
@@ -109,12 +112,11 @@ class SharePictureActivity: AppCompatActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivitySharePictureBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        // 스크롤뷰 배경 이벤트 설정
-//        binding.pictureRecyclerview.isNestedScrollingEnabled = false
-        scrollEvent()
+        mainBinding = ActivitySharePictureBinding.inflate(layoutInflater)
+        setContentView(mainBinding.root)
 
+
+//        scrollEvent()
 
         // socket 통신 연결
         mSocket = SocketApplication.get()
@@ -164,7 +166,7 @@ class SharePictureActivity: AppCompatActivity(){
                     inviteDialogOn(id, roomIdx, picture, nickname)
                 }
 
-                setProfileRecyclerview()
+//                setProfileRecyclerview()
 
                 var requestData = JSONObject()
                 requestData.put("id", myKakaoId)
@@ -234,46 +236,45 @@ class SharePictureActivity: AppCompatActivity(){
         }
 
         // 액션바 제목 설정
-        val actionbar = binding.toolbar
+        val actionbar = mainBinding.toolbar
         setSupportActionBar(actionbar) //커스텀한 toolbar를 액션바로 사용
         supportActionBar?.setDisplayShowTitleEnabled(false) //액션바에 표시되는 제목의 표시유무를 설정합니다. false로 해야 custom한 툴바의 이름이 화면에 보이게 됩니다.
 
         // 프로필 사진 옆 플러스 버튼: 카카오 친구 피커 실행
         // 수동으로 친구추가
-        binding.profileItemPlusButton.setOnClickListener {
-            val openPickerFriendRequestParams = OpenPickerFriendRequestParams(
-                title = "풀 스크린 멀티 친구 피커", //default "친구 선택"
-                viewAppearance = ViewAppearance.AUTO, //default ViewAppearance.AUTO
-                orientation = PickerOrientation.AUTO, //default PickerOrientation.AUTO
-                enableSearch = true, //default true
-                enableIndex = true, //default true
-                showMyProfile = false, //default true
-                showFavorite = true, //default true
-                showPickedFriend = null, // default true
-                maxPickableCount = null, // default 30
-                minPickableCount = null // default 1
-            )
+//        mainBinding.profileItemPlusButton.setOnClickListener {
+//            val openPickerFriendRequestParams = OpenPickerFriendRequestParams(
+//                title = "풀 스크린 멀티 친구 피커", //default "친구 선택"
+//                viewAppearance = ViewAppearance.AUTO, //default ViewAppearance.AUTO
+//                orientation = PickerOrientation.AUTO, //default PickerOrientation.AUTO
+//                enableSearch = true, //default true
+//                enableIndex = true, //default true
+//                showMyProfile = false, //default true
+//                showFavorite = true, //default true
+//                showPickedFriend = null, // default true
+//                maxPickableCount = null, // default 30
+//                minPickableCount = null // default 1
+//            )
+//
+//            PickerClient.instance.selectFriends(
+//                context = this!!,
+//                params = openPickerFriendRequestParams
+//            ) { selectedUsers, error ->
+//                if (error != null) {
+//                    Log.e(TAG, "친구 선택 실패", error)
+//                } else {
+//                    Log.d(TAG, "친구 선택 성공 $selectedUsers")
+//                    val friend_count = selectedUsers?.totalCount
+//                    var inviteFriendsId = mutableSetOf<Long>()
+//                    for (i in 0 until friend_count!!) {
+//                        inviteFriendsId.add(selectedUsers?.users?.get(i)?.id!!)
+//                    }
+//                    inviteRequest(inviteFriendsId)
+//                }
+//            }
+//        }
 
-            PickerClient.instance.selectFriends(
-                context = this!!,
-                params = openPickerFriendRequestParams
-            ) { selectedUsers, error ->
-                if (error != null) {
-                    Log.e(TAG, "친구 선택 실패", error)
-                } else {
-                    Log.d(TAG, "친구 선택 성공 $selectedUsers")
-                    val friend_count = selectedUsers?.totalCount
-                    var inviteFriendsId = mutableSetOf<Long>()
-                    for (i in 0 until friend_count!!) {
-                        inviteFriendsId.add(selectedUsers?.users?.get(i)?.id!!)
-                    }
-                    inviteRequest(inviteFriendsId)
-                }
-            }
-        }
-
-        //Adapter 초기화
-        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList)
+        //profileRecyclerview 레이아웃 설정
         profilePictureAdapter = ProfilePictureAdapter(joinFriendList, this)
         profilePictureAdapter.setClickListener(object : ProfilePictureAdapter.ItemClickListener{
             override fun onItemClick(view: View?, position: Int) {
@@ -281,15 +282,25 @@ class SharePictureActivity: AppCompatActivity(){
             }
 
         })
+//        mainBinding.profileRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
-        //recyclerview 레이아웃 설정
-        binding.pictureRecyclerview.layoutManager = GridLayoutManager(this, 3)
-        binding.profileRecyclerview.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        //pictureRecyclerview 레이아웃 설정
+        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList, zoomSelectionList)
+//        binding.pictureRecyclerview.layoutManager = GridLayoutManager(this, 3)
+//        binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
+//        mainBinding.pictureRecyclerview.adapter = pictureAdapter
 
-        binding.pictureRecyclerview.adapter = pictureAdapter
-
-        binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
-
+//        val spannedGridLayoutManager = SpannedGridLayoutManager(orientation = SpannedGridLayoutManager.Orientation.VERTICAL, spans = 3)
+//        spannedGridLayoutManager.itemOrderIsStable = true
+//        binding.pictureRecyclerview.layoutManager = spannedGridLayoutManager
+//        binding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))
+//        spannedGridLayoutManager.spanSizeLookup = SpannedGridLayoutManager.SpanSizeLookup { position ->
+//            if (pictureAdapter.mSelected.contains(position)) {
+//                SpanSize(2, 2)
+//            } else {
+//                SpanSize(1, 1)
+//            }
+//        }
 
 
 
@@ -301,7 +312,7 @@ class SharePictureActivity: AppCompatActivity(){
         bottomSheetDialog.setContentView(bottomSheetView)
 
         // fab버튼 클릭 시 바텀시트 활성화
-        binding.openBottomsheetFab.setOnClickListener {
+        mainBinding.openBottomsheetFab.setOnClickListener {
             bottomSheetDialog.show()
         }
 
@@ -317,36 +328,36 @@ class SharePictureActivity: AppCompatActivity(){
             }
         }
 
-        // 자동 업로드 스위치 버튼 저장값 불러오기
-        if(switch_pref.getBoolean("store_check", false)) {
-            binding.autoUploadSwitch.isChecked = true
-        }
-
-        // 자동 업로드 스위치 켜기/끄기
-        binding.autoUploadSwitch.setOnCheckedChangeListener { p0, isChecked ->
-            if (isChecked) {
-                val status = ContextCompat.checkSelfPermission(this, "android.permission.CAMERA")
-                if (status == PackageManager.PERMISSION_GRANTED) {
-                    // 포어그라운드 실행
-                    val serviceIntent = Intent(this, ForegroundService::class.java)
-                    serviceIntent.putExtra("myKakaoId", myKakaoId)
-                    switch_pref.edit().putBoolean("store_check", true).apply()
-                    ContextCompat.startForegroundService(this, serviceIntent)
-                    Toast.makeText(this, "Foreground Service start", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    // permission 허용 요청 실행
-                    requestPermissionLauncher.launch("android.permission.CAMERA")
-                }
-            }
-            else {
-                // 포어그라운드 종료
-                val serviceIntent = Intent(this, ForegroundService::class.java)
-                stopService(serviceIntent)
-                switch_pref.edit().putBoolean("store_check", false).apply()
-                Toast.makeText(this, "Foreground Service stop", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        // 자동 업로드 스위치 버튼 저장값 불러오기
+//        if(switch_pref.getBoolean("store_check", false)) {
+//            mainBinding.autoUploadSwitch.isChecked = true
+//        }
+//
+//        // 자동 업로드 스위치 켜기/끄기
+//        pictureAdapter.getHeaderView().setOnCheckedChangeListener { p0, isChecked ->
+//            if (isChecked) {
+//                val status = ContextCompat.checkSelfPermission(this, "android.permission.CAMERA")
+//                if (status == PackageManager.PERMISSION_GRANTED) {
+//                    // 포어그라운드 실행
+//                    val serviceIntent = Intent(this, ForegroundService::class.java)
+//                    serviceIntent.putExtra("myKakaoId", myKakaoId)
+//                    switch_pref.edit().putBoolean("store_check", true).apply()
+//                    ContextCompat.startForegroundService(this, serviceIntent)
+//                    Toast.makeText(this, "Foreground Service start", Toast.LENGTH_SHORT).show()
+//                }
+//                else {
+//                    // permission 허용 요청 실행
+//                    requestPermissionLauncher.launch("android.permission.CAMERA")
+//                }
+//            }
+//            else {
+//                // 포어그라운드 종료
+//                val serviceIntent = Intent(this, ForegroundService::class.java)
+//                stopService(serviceIntent)
+//                switch_pref.edit().putBoolean("store_check", false).apply()
+//                Toast.makeText(this, "Foreground Service stop", Toast.LENGTH_SHORT).show()
+//            }
+//        }
 
 
         //바텀시트 내 업로드 버튼
@@ -374,27 +385,27 @@ class SharePictureActivity: AppCompatActivity(){
         builder.setView(createAlbumAlertView)
         var alertDialog : AlertDialog? = builder.create()
         alertDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        val roomNameEditText = binding.roomNameEditText
+//        val roomNameEditText = mainBinding.roomNameEditText
 
 
         //바텀시트 내 다운로드 버튼
-        bottomSheetView.findViewById<ImageButton>(R.id.bottomsheet_download_button).setOnClickListener {
-            bottomSheetDialog.hide()
-
-            requestPermissionLauncher.launch("android.permission.WRITE_EXTERNAL_STORAGE")
-
-            var roomName = roomNameEditText.text.toString()
-            if(roomName.isEmpty()){
-                Toast.makeText(this, "앨범 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
-                roomNameEditText.requestFocus()
-            }else{
-                roomNameEditText.clearFocus()
-                createAlbumAlertView.findViewById<TextView>(R.id.alert_title).text = "\"${roomName}\" ${getString(R.string.download_album_alert_title)}"
-                createAlbumAlertView.findViewById<TextView>(R.id.alert_subtitle).text = getString(R.string.download_album_alert_subtitle)
-
-                alertDialog?.show()
-            }
-        }
+//        bottomSheetView.findViewById<ImageButton>(R.id.bottomsheet_download_button).setOnClickListener {
+//            bottomSheetDialog.hide()
+//
+//            requestPermissionLauncher.launch("android.permission.WRITE_EXTERNAL_STORAGE")
+//
+//            var roomName = roomNameEditText.text.toString()
+//            if(roomName.isEmpty()){
+//                Toast.makeText(this, "앨범 이름을 입력해주세요", Toast.LENGTH_SHORT).show()
+//                roomNameEditText.requestFocus()
+//            }else{
+//                roomNameEditText.clearFocus()
+//                createAlbumAlertView.findViewById<TextView>(R.id.alert_title).text = "\"${roomName}\" ${getString(R.string.download_album_alert_title)}"
+//                createAlbumAlertView.findViewById<TextView>(R.id.alert_subtitle).text = getString(R.string.download_album_alert_subtitle)
+//
+//                alertDialog?.show()
+//            }
+//        }
 
         //바텀시트 내 사진선택 버튼
         bottomSheetView.findViewById<ImageButton>(R.id.bottomsheet_select_button).setOnClickListener {
@@ -413,19 +424,19 @@ class SharePictureActivity: AppCompatActivity(){
         }
 
         // 다운로드 확인
-        createAlbumAlertView.findViewById<AppCompatButton>(R.id.confirm_alert).setOnClickListener {
-            alertDialog?.dismiss()
-            imageDownload(binding.roomNameEditText.text.toString())
-
-            val bundle = Bundle()
-            bundle.putInt("pictureCount", pictureAdapter.mSelected.size)
-            bundle.putString("albumName", binding.roomNameEditText.text.toString())
-            bundle.putString("albumCover", imageDataList[pictureAdapter.mSelected.first()].uri.toString())
-            val downloadAlbumFragment = DownloadCompleteFragment()
-            downloadAlbumFragment.arguments = bundle
-            val transaction = supportFragmentManager.beginTransaction().add(R.id.activity_share_picture_layout, downloadAlbumFragment)
-            transaction.commit()
-        }
+//        createAlbumAlertView.findViewById<AppCompatButton>(R.id.confirm_alert).setOnClickListener {
+//            alertDialog?.dismiss()
+//            imageDownload(mainBinding.roomNameEditText.text.toString())
+//
+//            val bundle = Bundle()
+//            bundle.putInt("pictureCount", pictureAdapter.mSelected.size)
+//            bundle.putString("albumName", mainBinding.roomNameEditText.text.toString())
+//            bundle.putString("albumCover", imageDataList[pictureAdapter.mSelected.first()].uri.toString())
+//            val downloadAlbumFragment = DownloadCompleteFragment()
+//            downloadAlbumFragment.arguments = bundle
+//            val transaction = supportFragmentManager.beginTransaction().add(R.id.activity_share_picture_layout, downloadAlbumFragment)
+//            transaction.commit()
+//        }
     }
     
 
@@ -589,24 +600,36 @@ class SharePictureActivity: AppCompatActivity(){
     }
 
     // profile recyclerview 초기화
-    private fun setProfileRecyclerview(){
-        // profile picture recyclerview 설정
-        profilePictureAdapter = ProfilePictureAdapter(joinFriendList, this)
-        profilePictureAdapter.setClickListener(object : ProfilePictureAdapter.ItemClickListener{
-            override fun onItemClick(view: View?, position: Int) {
-                // 클릭 시 selectPictureActivity로 넘어가며 -> 넘어간 이후 api 호출
-                gotoFaceFilter(position)
-            }
-
-        })
-        binding.profileRecyclerview.adapter = profilePictureAdapter
-    }
+//    private fun setProfileRecyclerview(){
+//        // profile picture recyclerview 설정
+//        profilePictureAdapter = ProfilePictureAdapter(joinFriendList, this)
+//        profilePictureAdapter.setClickListener(object : ProfilePictureAdapter.ItemClickListener{
+//            override fun onItemClick(view: View?, position: Int) {
+//                // 클릭 시 selectPictureActivity로 넘어가며 -> 넘어간 이후 api 호출
+//                gotoFaceFilter(position)
+//            }
+//
+//        })
+//        mainBinding.profileRecyclerview.adapter = profilePictureAdapter
+//    }
 
     // recyclerview 초기화
     private fun setRecyclerView(){
         // picture recyclerview 설정
-        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList)
-        binding.pictureRecyclerview.adapter = pictureAdapter
+        val spannedGridLayoutManager = SpannedGridLayoutManager(orientation = SpannedGridLayoutManager.Orientation.VERTICAL, spans = 3)
+        spannedGridLayoutManager.itemOrderIsStable = true
+        mainBinding.pictureRecyclerview.layoutManager = spannedGridLayoutManager
+        pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList, zoomSelectionList)
+        mainBinding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))
+        spannedGridLayoutManager.spanSizeLookup = SpannedGridLayoutManager.SpanSizeLookup { position ->
+            if (pictureAdapter.zoomSelected.contains(position)) {
+                SpanSize(2, 2)
+            } else {
+                SpanSize(1, 1)
+            }
+        }
+        mainBinding.pictureRecyclerview.adapter = pictureAdapter
+
     }
 
     // 툴바 메뉴 버튼 설정
@@ -743,7 +766,7 @@ class SharePictureActivity: AppCompatActivity(){
 
                     joinFriendList.add(FriendData(id, ImageData(joinFriendList.size, profile), nickName))
                 }
-                setProfileRecyclerview()
+//                setProfileRecyclerview()
             }
         }
     }
@@ -777,7 +800,7 @@ class SharePictureActivity: AppCompatActivity(){
                         break
                     }
                 }
-                setProfileRecyclerview()
+//                setProfileRecyclerview()
             }
         }
     }
@@ -856,32 +879,32 @@ class SharePictureActivity: AppCompatActivity(){
     }
 
 
-    private fun scrollEvent() {
-
-        binding.scrollView.overScrollMode = View.OVER_SCROLL_NEVER
-
-        // ScrollView에서 받는 이벤트 처리
-        // 1: 완전 불투명
-        // 스크롤 위치에 따라 alpha 값이 변경되므로, 방향은 상관이 없다.
-        binding.scrollView.setOnScrollListener(object : CustomScrollView.OnScrollListener {
-            override fun onScroll(direction: Int, scrollY: Float) {
-
-                // statusBar 높이 구하기
-                //var statusBarHeight = 0
-                //val resId = resources.getIdentifier("status_bar_height", "dimen", "android")
-
-                // top_image 높이 구하기, 나는 끝까지 안올리고 100% 불투명도 만들기위해 statusbar 높이를 뺐다.
-                val backgroundImgHeight = binding.topImage.height - 800
-
-                val alpha = ((backgroundImgHeight - scrollY) / backgroundImgHeight)
-
-                binding.topImage.alpha = alpha
-
-
-            }
-
-        })
-    }
+//    private fun scrollEvent() {
+//
+//        mainBinding.scrollView.overScrollMode = View.OVER_SCROLL_NEVER
+//
+//        // ScrollView에서 받는 이벤트 처리
+//        // 1: 완전 불투명
+//        // 스크롤 위치에 따라 alpha 값이 변경되므로, 방향은 상관이 없다.
+//        mainBinding.scrollView.setOnScrollListener(object : CustomScrollView.OnScrollListener {
+//            override fun onScroll(direction: Int, scrollY: Float) {
+//
+//                // statusBar 높이 구하기
+//                //var statusBarHeight = 0
+//                //val resId = resources.getIdentifier("status_bar_height", "dimen", "android")
+//
+//                // top_image 높이 구하기, 나는 끝까지 안올리고 100% 불투명도 만들기위해 statusbar 높이를 뺐다.
+//                val backgroundImgHeight = mainBinding.topImage.height - 800
+//
+//                val alpha = ((backgroundImgHeight - scrollY) / backgroundImgHeight)
+//
+//                mainBinding.topImage.alpha = alpha
+//
+//
+//            }
+//
+//        })
+//    }
 
 
     // 나가기 다이얼로그 열기

@@ -7,7 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.arasthel.spannedgridlayoutmanager.SpanSize
+import com.arasthel.spannedgridlayoutmanager.SpannedGridLayoutManager
 import com.bumptech.glide.Glide
 import com.tumblers.picat.ImageViewPagerActivity
 import com.tumblers.picat.R
@@ -15,38 +19,81 @@ import com.tumblers.picat.dataclass.ImageData
 
 class PictureAdapter(private var imageDataList: ArrayList<ImageData>,
                      val mContext: Context,
-                     var mSelected: HashSet<Int>)
-    : RecyclerView.Adapter<PictureAdapter.PictureViewHolder>(){
+                     var mSelected: HashSet<Int>,
+                    var zoomSelected: HashSet<Int>)
+    : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+
     private var mClickListener: ItemClickListener? = null
+    private var headerView: View? = null
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PictureViewHolder {
-        val inflater: LayoutInflater = LayoutInflater.from(parent.context)
-        val view: View = inflater.inflate(R.layout.item_picture, parent, false)
 
-        return PictureViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+
+        if (viewType == SharePictureMainAdapter.TYPE_HEADER){
+            val view = inflater.inflate(R.layout.activity_share_picture_header, parent, false)
+            headerView = view
+            return HeaderViewHolder(view)
+        }
+        else{
+            val view = inflater.inflate(R.layout.item_picture, parent, false)
+            return PictureViewHolder(view)
+        }
+
     }
 
-    override fun onBindViewHolder(holder: PictureViewHolder, position: Int) {
-        Glide.with(mContext)
-            .load(imageDataList[position].uri)
-            .into(holder.imv)
-        
-        holder.itemView.setOnClickListener {
-            var intent = Intent(mContext, ImageViewPagerActivity::class.java)
-            intent.putExtra("imageList", imageDataList)
-            intent.putExtra("current", position)
-            mContext.startActivity(intent)
-        }
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0) TYPE_HEADER
+        else TYPE_ITEM
+    }
 
-        // 화면 갱신 시 필요
-        // 선택된 사진이면
-        if (mSelected.contains(position)){
-            holder.itemView.isSelected = true
-            holder.isSelectedButton.setImageResource(R.drawable.selected_icn)
-        }else{
-            holder.isSelectedButton.visibility = View.INVISIBLE
+    companion object {
+        const val TYPE_HEADER = 0
+        const val TYPE_ITEM = 1
+    }
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
+        if (getItemViewType(position) == TYPE_HEADER){
+
+        }else {
+
+            val holder = holder as PictureViewHolder
+            Glide.with(mContext)
+                .load(imageDataList[position].uri)
+                .into(holder.imv)
+
+            holder.itemView.setOnClickListener {
+//            var intent = Intent(mContext, ImageViewPagerActivity::class.java)
+//            intent.putExtra("imageList", imageDataList)
+//            intent.putExtra("current", position)
+//            mContext.startActivity(intent)
+                if (zoomSelected.contains(position)) {
+                    zoomSelected.remove(position)
+                    notifyItemChanged(position)
+                    Glide.with(mContext)
+                        .load(imageDataList[position].uri)
+                        .into(holder.imv)
+                } else {
+                    zoomSelected.add(position)
+                    notifyItemChanged(position)
+                    Glide.with(mContext)
+                        .load(imageDataList[position].uri)
+                        .into(holder.imv)
+
+                }
+            }
+
+            // 화면 갱신 시 필요
+            // 선택된 사진이면
+            if (mSelected.contains(position)) {
+                holder.itemView.isSelected = true
+                holder.isSelectedButton.setImageResource(R.drawable.selected_icn)
+            } else {
+                holder.isSelectedButton.visibility = View.INVISIBLE
+            }
+            holder.zoomButton.visibility = View.INVISIBLE
         }
-        holder.zoomButton.visibility = View.INVISIBLE
 
     }
 
@@ -162,4 +209,12 @@ class PictureAdapter(private var imageDataList: ArrayList<ImageData>,
         }
 
     }
+
+
+    inner class HeaderViewHolder(itemView: View)
+        : RecyclerView.ViewHolder(itemView){
+
+    }
+
+
 }

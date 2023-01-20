@@ -34,6 +34,7 @@ class SelectPictureAdapter(
     override fun onBindViewHolder(holder: TestViewHolder, position: Int) {
         Glide.with(mContext)
             .load(imageDataList[position].uri)
+            .override(240, 240)
             .into(holder.imv)
 
         if (mSelected.contains(imageDataList[position].idx)) {

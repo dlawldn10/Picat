@@ -8,9 +8,13 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
+import com.arasthel.spannedgridlayoutmanager.SpanSize
+import com.arasthel.spannedgridlayoutmanager.SpannedGridLayoutManager
+import com.bumptech.glide.Glide
 import com.michaelflisar.dragselectrecyclerview.DragSelectTouchListener
 import com.michaelflisar.dragselectrecyclerview.DragSelectionProcessor
 import com.michaelflisar.dragselectrecyclerview.DragSelectionProcessor.ISelectionHandler
+import com.tumblers.picat.adapter.GridItemAdapter
 import com.tumblers.picat.adapter.SelectPictureAdapter
 import com.tumblers.picat.databinding.ActivityPictureSelectBinding
 import com.tumblers.picat.dataclass.ImageData
@@ -58,6 +62,9 @@ class SelectPictureActivity : AppCompatActivity() {
         supportActionBar?.setHomeAsUpIndicator(R.drawable.back_icn)
 
         actionbar.title = "사진 선택"
+
+
+
 
         setRecyclerView()
 
