@@ -32,7 +32,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:id="@+id/profile_tab_wrapper_layout">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/profile_tab"
@@ -81,7 +82,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintLeft_toLeftOf="parent"></androidx.recyclerview.widget.RecyclerView>
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            android:nestedScrollingEnabled="false"></androidx.recyclerview.widget.RecyclerView>
 
                         <ImageButton
                             android:id="@+id/profile_item_plus_button"

@@ -10,11 +10,12 @@
 
     <ImageView
         android:id="@+id/imv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:background="@color/picat_light_blue"
         android:gravity="center"
         android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
         android:foreground="@drawable/picture_selector"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

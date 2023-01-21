@@ -32,6 +32,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.arasthel.spannedgridlayoutmanager.SpanSize
@@ -287,12 +288,31 @@ class SharePictureActivity: AppCompatActivity(){
 
         //recyclerview 레이아웃 설정
         pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList, zoomSelectionList)
-        binding.pictureRecyclerview.layoutManager = GridLayoutManager(this, 3)
-        binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
+//        binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
 //        val spannedGridLayoutManager = SpannedGridLayoutManager(orientation = SpannedGridLayoutManager.Orientation.VERTICAL, spans = 3)
 //        spannedGridLayoutManager.itemOrderIsStable = true
 //        binding.pictureRecyclerview.layoutManager = spannedGridLayoutManager
-//        binding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))
+        binding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))
+        val gridLayoutManager = GridLayoutManager(this, 3)
+        binding.pictureRecyclerview.layoutManager = gridLayoutManager
+        gridLayoutManager.spanSizeLookup = object :SpanSizeLookup(){
+            override fun getSpanSize(position: Int): Int {
+//                if (position == 1){
+//                    return 2
+//                }else{
+//                    return 1
+//                }
+                if (pictureAdapter.zoomSelected.contains(position)) {
+//                    SpanSize(2, 2)
+                    return 2
+                } else {
+//                    SpanSize(1, 1)
+                    return 1
+                }
+            }
+
+        }
+
 //        spannedGridLayoutManager.spanSizeLookup = SpannedGridLayoutManager.SpanSizeLookup { position ->
 //            if (pictureAdapter.zoomSelected.contains(position)) {
 //                SpanSize(2, 2)
@@ -617,10 +637,8 @@ class SharePictureActivity: AppCompatActivity(){
         // picture recyclerview 설정
         pictureAdapter = PictureAdapter(imageDataList, this, selectionIdList, zoomSelectionList)
 
-        binding.pictureRecyclerview.layoutManager = GridLayoutManager(this, 3)
-        binding.pictureRecyclerview.addItemDecoration(GridSpacingItemDecoration(3, 10, includeEdge = false))
-
 //        val spannedGridLayoutManager = SpannedGridLayoutManager(orientation = SpannedGridLayoutManager.Orientation.VERTICAL, spans = 3)
+        println("setrecyclerView")
 //        spannedGridLayoutManager.itemOrderIsStable = true
 //        binding.pictureRecyclerview.layoutManager = spannedGridLayoutManager
 //        binding.pictureRecyclerview.addItemDecoration(SpaceItemDecorator(left = 10, top = 10, right = 10, bottom = 10))

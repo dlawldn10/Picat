@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.arasthel.spannedgridlayoutmanager.SpanSize
 import com.bumptech.glide.Glide
 import com.tumblers.picat.ImageViewPagerActivity
 import com.tumblers.picat.R
@@ -39,8 +40,13 @@ class PictureAdapter(private var imageDataList: ArrayList<ImageData>,
 //            mContext.startActivity(intent)
             if (zoomSelected.contains(position)) {
                 zoomSelected.remove(position)
+                println("unspanned")
+
             } else {
                 zoomSelected.add(position)
+                var pre = holder.itemView.layoutParams.width
+                holder.itemView.layoutParams.width = pre*2
+                println("spanned")
             }
 
             notifyItemChanged(position)
