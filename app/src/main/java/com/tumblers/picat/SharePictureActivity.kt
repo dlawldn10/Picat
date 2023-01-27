@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DCIM
@@ -158,8 +159,10 @@ class SharePictureActivity: AppCompatActivity(){
                 if (ContextCompat.checkSelfPermission(this, "android.permission.CAMERA") != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, "android.permission.READ_EXTERNAL_STORAGE") != PackageManager.PERMISSION_GRANTED
                     || ContextCompat.checkSelfPermission(this, "android.permission.WRITE_EXTERNAL_STORAGE") != PackageManager.PERMISSION_GRANTED) {
-
                     ActivityCompat.requestPermissions(this, permissions, PackageManager.PERMISSION_GRANTED)
+//                    if (Build.VERSION.SDK_INT >= 13) {
+//                        requestPermissionLauncher.launch("android.permission.POST_NOTIFICATIONS")
+//                    }
                 }
             }
         }
@@ -581,8 +584,6 @@ class SharePictureActivity: AppCompatActivity(){
 
         if (mSocket != null && !mSocket?.isActive!!) {
             mSocket?.connect()
-//            mSocket?.emit("participate", myKakaoId)
-//            mSocket?.on("participate", onParticipate)
         }
     }
 
@@ -768,10 +769,10 @@ class SharePictureActivity: AppCompatActivity(){
                 intent.putExtra("selectonIdList", selectionIdList)
                 intent.putExtra("myKakaoId", myKakaoId)
 
-                if (binding.allFilterButton.isChecked == true) {
+                if (binding.allFilterButton.isChecked) {
                     intent.putExtra("imageDataList", imageDataList)
                 }
-                else if (binding.exceptBlurFilterButton.isChecked == true) {
+                else if (binding.exceptBlurFilterButton.isChecked) {
                     intent.putExtra("imageDataList", clearImageDataList)
                 }
                 else {
@@ -795,10 +796,10 @@ class SharePictureActivity: AppCompatActivity(){
                 intent.putExtra("selectonIdList", selectionIdList)
                 intent.putExtra("myKakaoId", myKakaoId)
 
-                if (binding.allFilterButton.isChecked == true) {
+                if (binding.allFilterButton.isChecked) {
                     intent.putExtra("imageDataList", imageDataList)
                 }
-                else if (binding.exceptBlurFilterButton.isChecked == true) {
+                else if (binding.exceptBlurFilterButton.isChecked) {
                     intent.putExtra("imageDataList", clearImageDataList)
                 }
                 else {
@@ -822,10 +823,10 @@ class SharePictureActivity: AppCompatActivity(){
                 intent.putExtra("selectonIdList", selectionIdList)
                 intent.putExtra("myKakaoId", myKakaoId)
 
-                if (binding.allFilterButton.isChecked == true) {
+                if (binding.allFilterButton.isChecked) {
                     intent.putExtra("imageDataList", imageDataList)
                 }
-                else if (binding.exceptBlurFilterButton.isChecked == true) {
+                else if (binding.exceptBlurFilterButton.isChecked) {
                     intent.putExtra("imageDataList", clearImageDataList)
                 }
                 else {
@@ -879,12 +880,12 @@ class SharePictureActivity: AppCompatActivity(){
             mutex.withLock {
                 val img_count = JSONObject(args[0].toString()).getInt("img_cnt")
                 val img_list = JSONObject(args[0].toString()).getJSONArray("img_list")
-                for (i in 0..img_count - 1) {
+                for (i in 0 until img_count) {
                     val imgObj = JSONObject(img_list[i].toString()).getString("url")
                     val imgData = ImageData(imageDataList.size, imgObj)
                     imageDataList.add(imgData)
                 }
-                if (binding.allFilterButton.isChecked == true) {
+                if (binding.allFilterButton.isChecked) {
                     setRecyclerView()
                 }
             }

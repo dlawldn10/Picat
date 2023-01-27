@@ -75,9 +75,6 @@ class SelectByPeopleActivity : AppCompatActivity() {
         // api 호출
         apiRequest(selectedFriendId)
 
-
-
-
         setRecyclerView()
     }
 
