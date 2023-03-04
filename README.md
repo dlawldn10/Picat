@@ -1,5 +1,5 @@
 ## SW 사관학교 정글 나만의 무기 프로젝트
-얼굴 인식으로 쉽고 빠른 사진 공유 안드로이드 앱 Picat
+얼굴 인식과 흐린 사진 필터링을 통한 사진 공유 안드로이드 앱 Picat
 
 2022.12.22 ~ 2023.01.28
 
@@ -7,7 +7,7 @@
 ![Group 237](https://user-images.githubusercontent.com/69448918/215417167-6d308102-4bf7-4fda-84c1-fcedddd0e129.png)
 
 
-## 맡은 역할 - 클라이언트 개발
+## 맡은 역할 - 클라이언트 개발 <img src="https://img.shields.io/badge/Android Studio-3DDC84?style=flat&logo=Android Studio&logoColor=white"/>  <img src="https://img.shields.io/badge/Kotlin-7F52FF?style=flat&logo=Kotlin&logoColor=white"/>  <img src="https://img.shields.io/badge/Figma-F24E1E?style=flat&logo=Figma&logoColor=white"/>  
 - 안드로이드 스튜디오 & 코틀린 <b>클라이언트 개발</b>
 - UX/UI 디자인 및 레이아웃 구성
 - 사진 선택 인터랙션
